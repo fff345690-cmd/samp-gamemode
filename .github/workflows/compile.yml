@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Download Pawn Compiler
@@ -17,13 +17,14 @@ jobs:
         wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
         tar -xzf pawnc-3.10.10-linux.tar.gz
 
-    - name: Download SA-MP Includes
+    - name: Download SA-MP Includes (ZIP)
       run: |
-        git clone https://github.com/Zeex/samp-plugin-sdk.git
+        wget https://github.com/Zeex/samp-plugin-sdk/archive/refs/heads/master.zip
+        unzip master.zip
 
     - name: Compile Gamemode
       run: |
-        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn -i./samp-plugin-sdk/include
+        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn -isamp-plugin-sdk-master/include
 
     - name: Upload AMX
       uses: actions/upload-artifact@v4
