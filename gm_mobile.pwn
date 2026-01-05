@@ -8,7 +8,7 @@
 main()
 {
     print("====================================");
-    print("      OCEANO ROLEPLAY INICIADO      ");
+    print("      OCEANO ROLEPLAY INICIADO 2026     ");
     print("====================================");
 }
 
