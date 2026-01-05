@@ -1,0 +1,30 @@
+name: Compile SA-MP Gamemode
+
+on:
+  push:
+    paths:
+      - "*.pwn"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download Pawn Compiler
+      run: |
+        wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
+        tar -xzf pawnc-3.10.10-linux.tar.gz
+
+    - name: Compile Gamemode
+      run: |
+        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn
+        ls
+
+    - name: Upload AMX
+      uses: actions/upload-artifact@v4
+      with:
+        name: gamemode-amx
+        path: gm_mobile.amx
