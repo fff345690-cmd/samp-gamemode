@@ -20,12 +20,11 @@ jobs:
 
       - name: Set library path
         run: |
-          echo "$(pwd)/pawnc-3.10.10-linux/lib" >> $GITHUB_PATH
           echo "LD_LIBRARY_PATH=$(pwd)/pawnc-3.10.10-linux/lib" >> $GITHUB_ENV
 
       - name: Compile Gamemode
         run: |
-          pawnc-3.10.10-linux/bin/pawncc -ipawno/include gm_mobile.pwn
+          pawnc-3.10.10-linux/bin/pawncc -r -ipawno/include gm_mobile.pwn
 
       - name: Upload AMX
         uses: actions/upload-artifact@v4
