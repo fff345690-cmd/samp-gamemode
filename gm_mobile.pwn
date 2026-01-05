@@ -1,77 +1,101 @@
-#pragma rational 1
-
 #include <a_samp>
 
-#define COR_BRANCO   0xFFFFFFFF
-#define COR_VERDE    0x33FF33FF
+#define COR_BRANCO 0xFFFFFFFF
+#define COR_VERDE  0x33FF33FF
 #define COR_VERMELHO 0xFF3333FF
-#define COR_AZUL     0x3399FFFF
 
 main()
 {
     print("====================================");
-    print("      OCEANO ROLEPLAY INICIADO     ");
+    print("     GM OCEANO RP INICIADA          ");
     print("====================================");
 }
 
+// ====================================
+// GameMode Init
+// ====================================
 public OnGameModeInit()
 {
-    SetGameModeText("Oceano Roleplay");
+    SetGameModeText("Oceano Roleplay 🌊");
     ShowNameTags(1);
     ShowPlayerMarkers(1);
     EnableStuntBonusForAll(0);
 
-    // Spawn inicial (Los Santos)
-    AddPlayerClass(
-        0,
-        1958.3783, 1343.1572, 15.3746,
-        270.0,
-        0, 0,
-        0, 0,
-        0, 0
-    );
-
     return 1;
 }
 
+// ====================================
+// Player Connect
+// ====================================
 public OnPlayerConnect(playerid)
 {
     new nome[MAX_PLAYER_NAME];
     GetPlayerName(playerid, nome, sizeof(nome));
 
     new msg[128];
-    format(msg, sizeof(msg), "Bem-vindo %s ao Oceano Roleplay!", nome);
+    format(msg, sizeof(msg), "Bem-vindo %s ao Oceano RP!", nome);
     SendClientMessage(playerid, COR_VERDE, msg);
 
-    SendClientMessage(playerid, COR_AZUL, "Servidor Oceano Roleplay");
-    SendClientMessage(playerid, COR_BRANCO, "Digite /ajuda para ver os comandos.");
-
     return 1;
 }
 
+// ====================================
+// Player Spawn
+// ====================================
 public OnPlayerSpawn(playerid)
 {
-    SendClientMessage(playerid, COR_BRANCO, "Respeite as regras do roleplay.");
+    // Spawn no aeroporto
+    new Float:x = 1958.3783, Float:y = 1343.1572, Float:z = 15.3746, Float:angle = 270.0;
+    SetPlayerPos(playerid, x, y, z);
+    SetPlayerFacingAngle(playerid, angle);
+
+    // Skin FBI
+    SetPlayerSkin(playerid, 71); // FBI
+
+    // Armas
+    GivePlayerWeapon(playerid, 24, 12);  // Shotgun (Doze) com 12 tiros
+    GivePlayerWeapon(playerid, 31, 50);  // M4 com 50 tiros
+    GivePlayerWeapon(playerid, 22, 50);  // Pistola com 50 tiros
+
+    // NRG-500
+    new vehid = CreateVehicle(522, x+5.0, y+5.0, z, angle, -1, -1, 100); // 522 = NRG-500
+    PutPlayerInVehicle(playerid, vehid, 0);
+
+    // Mensagem no spawn
+    SendClientMessage(playerid, COR_BRANCO, "Você spawnou pronto para trocar tiro!");
+    SendClientMessage(playerid, COR_BRANCO, "Aproveite o Oceano RP 🌊");
+
     return 1;
 }
 
+// ====================================
+// Player Death
+// ====================================
+public OnPlayerDeath(playerid, killerid, reason)
+{
+    new nome[MAX_PLAYER_NAME];
+    GetPlayerName(playerid, nome, sizeof(nome));
+
+    SendClientMessage(-1, COR_VERMELHO, "%s morreu! Preparando respawn...", nome);
+    return 1;
+}
+
+// ====================================
+// Player Commands
+// ====================================
 public OnPlayerCommandText(playerid, cmdtext[])
 {
-    // /ajuda
-    if (strcmp(cmdtext, "/ajuda", true) == 0)
+    if(strcmp(cmdtext, "/ajuda", true) == 0)
     {
-        SendClientMessage(playerid, COR_VERDE, "=== Comandos Oceano RP ===");
+        SendClientMessage(playerid, COR_VERDE, "=== Comandos ===");
         SendClientMessage(playerid, COR_BRANCO, "/ajuda - Ver comandos");
-        SendClientMessage(playerid, COR_BRANCO, "/info  - Informacoes do servidor");
+        SendClientMessage(playerid, COR_BRANCO, "/info - Informações do servidor");
         return 1;
     }
 
-    // /info
-    if (strcmp(cmdtext, "/info", true) == 0)
+    if(strcmp(cmdtext, "/info", true) == 0)
     {
-        SendClientMessage(playerid, COR_AZUL, "Oceano Roleplay");
-        SendClientMessage(playerid, COR_BRANCO, "Gamemode criada 100% pelo celular.");
-        SendClientMessage(playerid, COR_BRANCO, "Projeto em desenvolvimento.");
+        SendClientMessage(playerid, COR_VERDE, "GM Oceano RP criada 100% pelo celular!");
         return 1;
     }
 
