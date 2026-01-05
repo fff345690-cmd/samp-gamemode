@@ -1,55 +1,56 @@
 #include <a_samp>
-#pragma rational
 
-#define COR_BRANCO 0xFFFFFFFF
-#define COR_VERDE  0x33FF33FF
-#define COR_VERMELHO 0xFF3333FF
+#define SPAWN_X 1685.53
+#define SPAWN_Y -2334.78
+#define SPAWN_Z 13.55
+#define SPAWN_A 90.0
 
 main()
 {
-    print("====================================");
-    print("   GM MOBILE - Oceano RP INICIADA   ");
-    print("====================================");
+    print("Oceano Roleplay carregado.");
 }
 
 public OnGameModeInit()
 {
     SetGameModeText("Oceano Roleplay");
-    ShowNameTags(1);
-    ShowPlayerMarkers(1);
-    EnableStuntBonusForAll(0);
-
-    AddPlayerClass(
-        0,
-        1958.3783,
-        1343.1572,
-        15.3746,
-        270.0,
-        71, 0,
-        0, 0,
-        0, 0
-    );
+    UsePlayerPedAnims();
     return 1;
 }
 
 public OnPlayerConnect(playerid)
 {
-    SendClientMessage(playerid, COR_VERDE, "Bem-vindo ao Oceano RP!");
+    SendClientMessage(playerid, 0x00FF00FF, "Bem-vindo ao Oceano Roleplay!");
     return 1;
 }
 
 public OnPlayerSpawn(playerid)
 {
-    SetPlayerPos(playerid, 1958.3783, 1343.1572, 15.3746);
-    SetPlayerFacingAngle(playerid, 270.0);
-    SetPlayerSkin(playerid, 71);
+    SetPlayerSkin(playerid, 286); // FBI
 
-    GivePlayerWeapon(playerid, 24, 12);
-    GivePlayerWeapon(playerid, 31, 50);
-    GivePlayerWeapon(playerid, 22, 50);
+    SetPlayerPos(playerid, SPAWN_X, SPAWN_Y, SPAWN_Z);
+    SetPlayerFacingAngle(playerid, SPAWN_A);
+    SetPlayerInterior(playerid, 0);
+    SetPlayerVirtualWorld(playerid, 0);
 
-    new veh = CreateVehicle(522, 1963.0, 1348.0, 15.3, 270.0, -1, -1, 0);
+    GivePlayerWeapon(playerid, 25, 200); // Doze
+    GivePlayerWeapon(playerid, 31, 300); // M4
+    GivePlayerWeapon(playerid, 22, 200); // Pistola
+
+    new veh = CreateVehicle(522, SPAWN_X + 3.0, SPAWN_Y, SPAWN_Z, SPAWN_A, 1, 1, -1);
     PutPlayerInVehicle(playerid, veh, 0);
 
+    return 1;
+}
+
+public OnPlayerDeath(playerid, killerid, reason)
+{
+    SetTimerEx("RespawnPlayer", 2000, false, "i", playerid);
+    return 1;
+}
+
+forward RespawnPlayer(playerid);
+public RespawnPlayer(playerid)
+{
+    SpawnPlayer(playerid);
     return 1;
 }
