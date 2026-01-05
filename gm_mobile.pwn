@@ -1,3 +1,5 @@
+#pragma rational 1
+
 #include <a_samp>
 
 #define COR_BRANCO   0xFFFFFFFF
