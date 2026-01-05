@@ -7,7 +7,7 @@
 
 main()
 {
-    print("Oceano Roleplay carregado.");
+    print("Oceano Role play carregado.");
 }
 
 public OnGameModeInit()
