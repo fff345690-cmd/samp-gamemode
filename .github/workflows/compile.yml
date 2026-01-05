@@ -19,12 +19,11 @@ jobs:
 
     - name: Download SA-MP Includes
       run: |
-        wget https://archive.org/download/samp037svr/samp037svr.tar.gz
-        tar -xzf samp037svr.tar.gz
+        git clone https://github.com/Zeex/samp-plugin-sdk.git
 
     - name: Compile Gamemode
       run: |
-        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn -i./samp037svr/include
+        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn -i./samp-plugin-sdk/include
 
     - name: Upload AMX
       uses: actions/upload-artifact@v4
