@@ -2,32 +2,30 @@ name: Compile SA-MP Gamemode
 
 on:
   push:
-    paths:
-      - "*.pwn"
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Download Pawn Compiler
-        run: |
-          wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
-          tar -xzf pawnc-3.10.10-linux.tar.gz
+    - name: Download SA-MP Server
+      run: |
+        wget https://github.com/Zeex/pawn/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
+        tar -xzf pawnc-3.10.10-linux.tar.gz
 
-      - name: Set library path
-        run: |
-          echo "LD_LIBRARY_PATH=$(pwd)/pawnc-3.10.10-linux/lib" >> $GITHUB_ENV
+        wget https://github.com/sa-mp/sampctl/releases/download/v1.11.0/samp03DLsvr_R2-1.tar.gz
+        tar -xzf samp03DLsvr_R2-1.tar.gz
 
-      - name: Compile Gamemode
-        run: |
-          pawnc-3.10.10-linux/bin/pawncc -r -ipawno/include gm_mobile.pwn
+    - name: Compile Gamemode
+      run: |
+        ./pawnc-3.10.10-linux/bin/pawncc gm_mobile.pwn -i./samp03/include
 
-      - name: Upload AMX
-        uses: actions/upload-artifact@v4
-        with:
-          name: gamemode-amx
-          path: gm_mobile.amx
+    - name: Upload AMX
+      uses: actions/upload-artifact@v4
+      with:
+        name: gm_mobile-amx
+        path: gm_mobile.amx
