@@ -1,89 +1,85 @@
-#include <a_samp>
+#if defined _a_samp_included
+    #endinput
+#endif
+#define _a_samp_included
 
-// Cores
-#define COR_BRANCO 0xFFFFFFFF
-#define COR_VERDE  0x33FF33FF
+// ===============================
+// DEFINIÇÕES BÁSICAS
+// ===============================
+#define MAX_PLAYERS        1000
+#define MAX_PLAYER_NAME    24
 
-// Coordenadas do Aeroporto LS
-#define SPAWN_X 1685.427
-#define SPAWN_Y -2334.678
-#define SPAWN_Z 13.546
-#define SPAWN_A 90.0
+// ===============================
+// TIPOS
+// ===============================
+#define bool:            _:
+#define Float:           _
 
-main()
-{
-    print("=================================");
-    print("  Oceano Roleplay - GM Iniciada  ");
-    print("=================================");
-}
+// ===============================
+// CORE NATIVES
+// ===============================
+native print(const string[]);
+native printf(const format[], {Float,_}:...);
+native SendClientMessage(playerid, color, const message[]);
+native SendClientMessageToAll(color, const message[]);
+native SetGameModeText(const string[]);
+native ShowNameTags(show);
+native ShowPlayerMarkers(mode);
+native EnableStuntBonusForAll(enable);
 
-public OnGameModeInit()
-{
-    SetGameModeText("Oceano Roleplay");
-    ShowPlayerMarkers(1);
-    ShowNameTags(1);
-    EnableStuntBonusForAll(0);
+// ===============================
+// PLAYER
+// ===============================
+native GetPlayerName(playerid, name[], len);
+native SetPlayerPos(playerid, Float:x, Float:y, Float:z);
+native SetPlayerFacingAngle(playerid, Float:angle);
+native SetPlayerSkin(playerid, skinid);
+native GivePlayerWeapon(playerid, weaponid, ammo);
+native ResetPlayerWeapons(playerid);
+native SpawnPlayer(playerid);
 
-    // Classe base (FBI)
-    AddPlayerClass(
-        286,            // Skin FBI
-        SPAWN_X,
-        SPAWN_Y,
-        SPAWN_Z,
-        SPAWN_A,
-        0,0,0,0,0,0
-    );
-    return 1;
-}
+// ===============================
+// CLASSES
+// ===============================
+native AddPlayerClass(
+    modelid,
+    Float:x,
+    Float:y,
+    Float:z,
+    Float:rotation,
+    weapon1, ammo1,
+    weapon2, ammo2,
+    weapon3, ammo3
+);
 
-public OnPlayerConnect(playerid)
-{
-    SendClientMessage(playerid, COR_VERDE, "Bem-vindo ao Oceano Roleplay!");
-    SendClientMessage(playerid, COR_BRANCO, "Servidor focado em trocação e RP livre.");
-    return 1;
-}
+// ===============================
+// VEHÍCULOS
+// ===============================
+native CreateVehicle(
+    modelid,
+    Float:x,
+    Float:y,
+    Float:z,
+    Float:rotation,
+    color1,
+    color2,
+    respawn_delay
+);
+native PutPlayerInVehicle(playerid, vehicleid, seatid);
 
-public OnPlayerSpawn(playerid)
-{
-    // Posição
-    SetPlayerPos(playerid, SPAWN_X, SPAWN_Y, SPAWN_Z);
-    SetPlayerFacingAngle(playerid, SPAWN_A);
+// ===============================
+// STRINGS (ESSENCIAL)
+// ===============================
+native strcmp(const string1[], const string2[], bool:ignorecase = false);
+native format(output[], size = sizeof output, const format[], {Float,_}:...);
 
-    // Skin FBI
-    SetPlayerSkin(playerid, 286);
-
-    // Armas
-    GivePlayerWeapon(playerid, 22, 200); // Pistola
-    GivePlayerWeapon(playerid, 25, 100); // Shotgun (doze)
-    GivePlayerWeapon(playerid, 31, 300); // M4
-
-    // Criar NRG-500
-    new veh = CreateVehicle(
-        522,            // NRG-500
-        SPAWN_X + 3.0,
-        SPAWN_Y,
-        SPAWN_Z,
-        SPAWN_A,
-        -1,
-        -1,
-        0
-    );
-    PutPlayerInVehicle(playerid, veh, 0);
-
-    SendClientMessage(playerid, COR_VERDE, "Você spawnou pronto para a ação!");
-    return 1;
-}
-
-public OnPlayerDeath(playerid, killerid, reason)
-{
-    // Respawn automático
-    SetTimerEx("RespawnPlayerDelay", 2000, false, "i", playerid);
-    return 1;
-}
-
-forward RespawnPlayerDelay(playerid);
-public RespawnPlayerDelay(playerid)
-{
-    SpawnPlayer(playerid);
-    return 1;
-}
+// ===============================
+// CALLBACKS
+// ===============================
+forward OnGameModeInit();
+forward OnGameModeExit();
+forward OnPlayerConnect(playerid);
+forward OnPlayerDisconnect(playerid, reason);
+forward OnPlayerSpawn(playerid);
+forward OnPlayerDeath(playerid, killerid, reason);
+forward OnPlayerCommandText(playerid, cmdtext[]);
