@@ -18,7 +18,7 @@ new MotoSpawn;
 main()
 {
     print("====================================");
-    print("   OCEANO ROLEPLAY 🌊 INICIADO");
+    print("   OCEANO ROLEPLAY INICIADO");
     print("====================================");
 }
 
