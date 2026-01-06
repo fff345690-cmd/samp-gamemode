@@ -1,32 +1,30 @@
-name: Compile SA-MP Gamemode
+name: Compilar GameMode SA-MP
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do repositório
+    - name: Baixar repositório
       uses: actions/checkout@v4
 
-    - name: Baixar Pawn Compiler
+    - name: Baixar SA-MP 0.3.7 Server
       run: |
-        wget https://github.com/pawn-lang/compiler/releases/download/v3.10.10/pawnc-3.10.10-linux.tar.gz
-        tar -xzf pawnc-3.10.10-linux.tar.gz
+        wget https://files.sa-mp.com/samp037svr_R2-1.tar.gz
+        tar -xzf samp037svr_R2-1.tar.gz
 
     - name: Compilar GameMode
       run: |
-        export LD_LIBRARY_PATH=$PWD/pawnc-3.10.10-linux/bin
-        ./pawnc-3.10.10-linux/bin/pawncc \
-        -ipawno/include \
-        gm_mobile.pwn
+        chmod +x samp03/pawno/pawncc
+        samp03/pawno/pawncc gm_mobile.pwn \
+        -i samp03/pawno/include \
+        -o gm_mobile.amx
 
-    - name: Upload do AMX
+    - name: Enviar AMX compilado
       uses: actions/upload-artifact@v4
       with:
         name: gamemode-amx
