@@ -21,6 +21,7 @@ jobs:
 
     - name: Compilar GameMode
       run: |
+        export LD_LIBRARY_PATH=$PWD/pawnc-3.10.10-linux/bin
         ./pawnc-3.10.10-linux/bin/pawncc \
         -ipawno/include \
         gm_mobile.pwn
